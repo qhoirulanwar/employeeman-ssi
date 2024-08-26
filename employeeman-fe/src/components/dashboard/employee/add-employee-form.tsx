@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { useForm, type SubmitHandler, Controller } from 'react-hook-form';
 import {
   Stack, Typography, TextField, Button, FormControl, InputLabel,
   Select, MenuItem, Box, Paper, Grid, Autocomplete, createFilterOptions
@@ -160,19 +160,19 @@ export const AddEmployeeForm: React.FC = () => {
               <TextField
                 {...register('name', { required: 'Nama wajib diisi' })}
                 label="Nama"
-                error={!!errors.name}
+                error={Boolean(errors.name)}
                 helperText={errors.name?.message}
               />
               <TextField
                 {...register('no', { required: 'Nomor wajib diisi' })}
                 label="Nomor"
-                error={!!errors.no}
+                error={Boolean(errors.no)}
                 helperText={errors.no?.message}
               />
               <TextField
                 {...register('position', { required: 'Posisi wajib diisi' })}
                 label="Posisi"
-                error={!!errors.position}
+                error={Boolean(errors.position)}
                 helperText={errors.position?.message}
               />
               <Controller
@@ -201,14 +201,14 @@ export const AddEmployeeForm: React.FC = () => {
                       <TextField
                         {...params}
                         label="Departemen"
-                        error={!!errors.department}
+                        error={Boolean(errors.department)}
                         helperText={errors.department?.message}
                       />
                     )}
                     onChange={(_, newValue) => {
                       if (typeof newValue === 'string') {
                         field.onChange(newValue);
-                      } else if (newValue && newValue.inputValue) {
+                      } else if (newValue?.inputValue) {
                         // Create a new value from the user input
                         field.onChange(newValue.inputValue);
                       } else {
@@ -238,10 +238,10 @@ export const AddEmployeeForm: React.FC = () => {
                 type="date"
                 label="Tanggal Bergabung"
                 InputLabelProps={{ shrink: true }}
-                error={!!errors.join_date}
+                error={Boolean(errors.join_date)}
                 helperText={errors.join_date?.message}
               />
-              <FormControl error={!!errors.status}>
+              <FormControl error={Boolean(errors.status)}>
                 <InputLabel>Status</InputLabel>
                 <Select
                   {...register('status', { required: 'Status wajib diisi' })}
@@ -251,7 +251,7 @@ export const AddEmployeeForm: React.FC = () => {
                   <MenuItem value="tetap">Tetap</MenuItem>
                   <MenuItem value="kontrak">Kontrak</MenuItem>
                 </Select>
-                {errors.status && <Typography color="error">{errors.status.message}</Typography>}
+                {errors.status ? <Typography color="error">{errors.status.message}</Typography> : null}
               </FormControl>
             </Stack>
           </Grid>
@@ -270,18 +270,16 @@ export const AddEmployeeForm: React.FC = () => {
                     return true;
                   }
                 })}
-                error={!!errors.file}
+                error={Boolean(errors.file)}
                 helperText={errors.file?.message}
                 InputLabelProps={{ shrink: true }}
                 inputProps={{ accept: "image/*" }}
               />
 
-              {previewImage && (
-                <Box mt={2}>
-                  <Typography variant="subtitle1">Preview:</Typography>
-                  <img src={previewImage} alt="Preview" style={{ maxWidth: '100%', maxHeight: '300px' }} />
-                </Box>
-              )}
+              {previewImage ? <Box mt={2}>
+                <Typography variant="subtitle1">Preview:</Typography>
+                <img src={previewImage} alt="Preview" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+              </Box> : null}
             </Stack>
           </Grid>
 

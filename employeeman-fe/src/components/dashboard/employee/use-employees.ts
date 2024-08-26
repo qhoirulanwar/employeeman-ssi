@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import { ApiResponse } from './employee-types';
 import { config } from '@/config';
+import { type ApiResponse } from './employee-types';
 
 export const useEmployees = (
   department: string,

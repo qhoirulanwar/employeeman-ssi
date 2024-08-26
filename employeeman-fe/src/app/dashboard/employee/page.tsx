@@ -1,6 +1,5 @@
 import * as React from 'react';
 import type { Metadata } from 'next';
-
 import { config } from '@/config';
 import EmployeePage from '@/components/dashboard/employee/employee-page';
 

@@ -9,7 +9,6 @@ import { useTheme } from '@mui/material/styles';
 import type { SxProps } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import type { ApexOptions } from 'apexcharts';
-
 import { Chart } from '@/components/core/chart';
 import { config } from '@/config';
 

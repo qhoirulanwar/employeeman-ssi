@@ -16,7 +16,7 @@ import {
 import { CaretUp as CaretUpIcon } from '@phosphor-icons/react/dist/ssr/CaretUp';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
 import { DotsThreeOutlineVertical, Pencil, Trash } from '@phosphor-icons/react';
-import { Employee } from './employee-types';
+import { type Employee } from './employee-types';
 import { getStatusChipColor, getPhotoUrl, formatDate } from './employee-utils';
 
 interface EmployeeTableProps {
@@ -79,22 +79,22 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
+            <TableCell onClick={() => { handleSort('name'); }} style={{ cursor: 'pointer' }}>
               Nama {renderSortIcon('name')}
             </TableCell>
             <TableCell>Nomor Karyawan</TableCell>
             <TableCell>Jabatan</TableCell>
-            <TableCell onClick={() => handleSort('department')} style={{ cursor: 'pointer' }}>
+            <TableCell onClick={() => { handleSort('department'); }} style={{ cursor: 'pointer' }}>
               Departemen {renderSortIcon('department')}
             </TableCell>
-            <TableCell onClick={() => handleSort('join_date')} style={{ cursor: 'pointer' }}>
+            <TableCell onClick={() => { handleSort('join_date'); }} style={{ cursor: 'pointer' }}>
               Tanggal Bergabung {renderSortIcon('join_date')}
             </TableCell>
             <TableCell>Foto</TableCell>
-            <TableCell onClick={() => handleSort('status')} style={{ cursor: 'pointer' }}>
+            <TableCell onClick={() => { handleSort('status'); }} style={{ cursor: 'pointer' }}>
               Status {renderSortIcon('status')}
             </TableCell>
-            <TableCell></TableCell>
+            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -119,7 +119,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
                 <Chip
                   style={{ textTransform: 'uppercase' }}
                   label={employee.status}
-                  color={getStatusChipColor(employee.status) as "warning" | "info" | "success" | "default"}
+                  color={getStatusChipColor(employee.status)}
                   size="small"
                 />
               </TableCell>
@@ -128,7 +128,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
                   aria-label="more"
                   aria-controls="long-menu"
                   aria-haspopup="true"
-                  onClick={(event) => handleMenuOpen(event, employee.id)}
+                  onClick={(event) => { handleMenuOpen(event, employee.id); }}
                 >
                   <DotsThreeOutlineVertical />
                 </IconButton>

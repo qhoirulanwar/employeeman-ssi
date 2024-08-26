@@ -1,6 +1,5 @@
 import type { Components } from '@mui/material/styles';
 import { tableCellClasses } from '@mui/material/TableCell';
-
 import type { Theme } from '../types';
 
 export const MuiTableHead = {

@@ -1,5 +1,4 @@
 import type { Components } from '@mui/material/styles';
-
 import type { Theme } from '../types';
 import { MuiAvatar } from './avatar';
 import { MuiButton } from './button';

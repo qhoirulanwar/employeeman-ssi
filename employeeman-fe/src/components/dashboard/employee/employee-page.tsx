@@ -26,14 +26,14 @@ import { SortAscending, Funnel } from '@phosphor-icons/react';
 import Link from 'next/link';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { config } from '@/config';
 import ImportCSVModal from './import-csv-modal';
 import EmployeeEditForm from './employee-edit-form';
 import { useEmployees } from './use-employees';
 import { EmployeeTable } from './employee-table';
 import { FilterPopover, EmployeeFilters, SortPopover } from './employee-filters';
 import { convertToCSV, dataForUpdate } from './employee-utils';
-import { Employee } from './employee-types';
-import { config } from '@/config';
+import { type Employee } from './employee-types';
 
 export default function EmployeePage(): React.JSX.Element {
   console.log('Rendering EmployeePage');
@@ -58,7 +58,7 @@ export default function EmployeePage(): React.JSX.Element {
     async (updatedData: { employee: Employee; newPhoto: File | null }) => {
       const formData = new FormData();
       Object.entries(dataForUpdate(updatedData.employee)).forEach(([key, value]) => {
-        formData.append(key, value as string);
+        formData.append(key, value);
       });
 
       if (updatedData.newPhoto) {
@@ -165,16 +165,16 @@ export default function EmployeePage(): React.JSX.Element {
   }
   if (error) {
     console.error('Error loading employees:', error);
-    return <Typography>Error: {(error as Error).message}</Typography>;
+    return <Typography>Error: {(error).message}</Typography>;
   }
 
   console.log('Rendering EmployeePage with data:', data);
 
-  const handleImportModalOpen = () => setImportModalOpen(true);
-  const handleImportModalClose = () => setImportModalOpen(false);
+  const handleImportModalOpen = () => { setImportModalOpen(true); };
+  const handleImportModalClose = () => { setImportModalOpen(false); };
 
   const exportToPDF = () => {
-    if (!data || !data.data) {
+    if (!data?.data) {
       console.error('No data available for PDF export');
       return;
     }
@@ -207,7 +207,7 @@ export default function EmployeePage(): React.JSX.Element {
   };
 
   const exportToCSV = () => {
-    if (!data || !data.data) {
+    if (!data?.data) {
       console.error('No data available for CSV export');
       return;
     }
@@ -290,7 +290,7 @@ export default function EmployeePage(): React.JSX.Element {
       </Stack>
 
       <Stack justifyContent="space-between" direction="row" spacing={1} sx={{ paddingBottom: '12px' }}>
-        <Stack direction={'row'} spacing={2}>
+        <Stack direction="row" spacing={2}>
           <Link href="/dashboard/employee/add">
             <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
               Tambah Karyawan
@@ -303,7 +303,7 @@ export default function EmployeePage(): React.JSX.Element {
           </Button>
         </Stack>
 
-        <Stack direction={'row'} spacing={2}>
+        <Stack direction="row" spacing={2}>
           <Button
             color="inherit"
             startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}
@@ -319,19 +319,16 @@ export default function EmployeePage(): React.JSX.Element {
         </Stack>
       </Stack>
 
-      {data && (
-        <EmployeeTable
+      {data ? <EmployeeTable
           employees={data.data}
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSort={handleSort}
           onEdit={handleEdit}
           onDelete={handleDelete}
-        />
-      )}
+        /> : null}
 
-      {data && (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+      {data ? <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
           <FormControl>
             <Select
               value={rowsPerPage}
@@ -351,17 +348,16 @@ export default function EmployeePage(): React.JSX.Element {
           <Pagination
             count={data.meta.totalPages}
             page={page}
-            onChange={(event, value) => setPage(value)}
+            onChange={(event, value) => { setPage(value); }}
             color="primary"
           />
-        </Box>
-      )}
+        </Box> : null}
 
       <ImportCSVModal open={importModalOpen} onClose={handleImportModalClose} />
 
       <Modal
         open={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
+        onClose={() => { setEditModalOpen(false); }}
         aria-labelledby="edit-employee-modal"
         aria-describedby="modal-to-edit-employee-data"
       >
@@ -378,19 +374,19 @@ export default function EmployeePage(): React.JSX.Element {
           <EmployeeEditForm
             employee={selectedEmployee}
             onSave={handleSaveEdit}
-            onCancel={() => setEditModalOpen(false)}
+            onCancel={() => { setEditModalOpen(false); }}
           />
         </Box>
       </Modal>
 
       <Dialog
         open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
+        onClose={() => { setDeleteDialogOpen(false); }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Konfirmasi Penghapusan"}
+          Konfirmasi Penghapusan
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -398,7 +394,7 @@ export default function EmployeePage(): React.JSX.Element {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Batal</Button>
+          <Button onClick={() => { setDeleteDialogOpen(false); }}>Batal</Button>
           <Button onClick={handleConfirmDelete} autoFocus>
             Hapus
           </Button>

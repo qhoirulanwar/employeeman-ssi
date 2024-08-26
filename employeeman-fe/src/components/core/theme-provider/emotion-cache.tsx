@@ -24,7 +24,7 @@ export default function NextAppDirEmotionCacheProvider(props: NextAppDirEmotionC
   const [registry] = React.useState<Registry>(() => {
     const cache = createCache(options);
     cache.compat = true;
-    // eslint-disable-next-line @typescript-eslint/unbound-method -- Expected
+     
     const prevInsert = cache.insert;
     let inserted: { name: string; isGlobal: boolean }[] = [];
     cache.insert = (...args) => {
@@ -54,7 +54,7 @@ export default function NextAppDirEmotionCacheProvider(props: NextAppDirEmotionC
     let styles = '';
     let dataEmotionAttribute = registry.cache.key;
 
-    const globals: { name: string; style: string }[] = [];
+    const globals: { name: string; style: any }[] = [];
 
     inserted.forEach(({ name, isGlobal }) => {
       const style = registry.cache.inserted[name];
@@ -70,7 +70,7 @@ export default function NextAppDirEmotionCacheProvider(props: NextAppDirEmotionC
     });
 
     return (
-      <React.Fragment>
+      <>
         {globals.map(
           ({ name, style }): React.JSX.Element => (
             <style
@@ -81,7 +81,7 @@ export default function NextAppDirEmotionCacheProvider(props: NextAppDirEmotionC
           )
         )}
         {styles ? <style dangerouslySetInnerHTML={{ __html: styles }} data-emotion={dataEmotionAttribute} /> : null}
-      </React.Fragment>
+      </>
     );
   });
 

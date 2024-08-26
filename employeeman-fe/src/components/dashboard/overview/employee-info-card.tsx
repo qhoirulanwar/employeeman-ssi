@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { ArrowDown as ArrowDownIcon } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { ArrowUp as ArrowUpIcon } from '@phosphor-icons/react/dist/ssr/ArrowUp';
 import { CurrencyDollar as CurrencyDollarIcon } from '@phosphor-icons/react/dist/ssr/CurrencyDollar';
-import { ResponsiveStyleValue } from '@mui/system';
+import { type ResponsiveStyleValue } from '@mui/system';
 
 export interface BudgetProps {
   // diff?: number;

@@ -14,8 +14,8 @@ import {
   createFilterOptions,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { Employee } from './employee-types';
 import { config } from '@/config';
+import { type Employee } from './employee-types';
 
 interface EmployeeEditFormProps {
   employee: Employee | null;
@@ -71,7 +71,7 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
     const { name, value } = e.target;
     setFormData((prevData: any) => ({
       ...prevData!,
-      [name as string]: value,
+      [name!]: value,
     }));
   };
 
@@ -81,7 +81,7 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
         ...prevData!,
         department: newValue,
       }));
-    } else if (newValue && newValue.inputValue) {
+    } else if (newValue?.inputValue) {
       // Create a new value from the user input
       setFormData((prevData: any) => ({
         ...prevData!,
@@ -112,7 +112,7 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
 
   if (!formData) {
     console.log('Loading employees data...');
-    return <Typography></Typography>;
+    return <Typography />;
   }
 
   return (

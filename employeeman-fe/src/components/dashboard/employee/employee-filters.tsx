@@ -8,8 +8,8 @@ import {
   Autocomplete,
   TextField,
 } from '@mui/material';
-import { DepartmentOption } from './employee-types';
 import { config } from '@/config';
+import { type DepartmentOption } from './employee-types';
 
 interface FilterPopoverProps {
   department: string;
@@ -56,7 +56,7 @@ export const FilterPopover: React.FC<FilterPopoverProps> = ({
       />
       <FormControl fullWidth>
         <InputLabel>Status</InputLabel>
-        <Select value={status} onChange={(e) => setStatus(e.target.value as string)}>
+        <Select value={status} onChange={(e) => { setStatus(e.target.value); }}>
           <MenuItem value="">Semua</MenuItem>
           <MenuItem value="probation">Probation</MenuItem>
           <MenuItem value="kontrak">Kontrak</MenuItem>
@@ -83,7 +83,7 @@ export const EmployeeFilters: React.FC<EmployeeFiltersProps> = ({
   <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
     <FormControl fullWidth>
       <InputLabel>Urutkan Berdasarkan</InputLabel>
-      <Select value={sortBy} onChange={(e) => setSortBy(e.target.value as string)}>
+      <Select value={sortBy} onChange={(e) => { setSortBy(e.target.value); }}>
         <MenuItem value="name">Nama</MenuItem>
         <MenuItem value="join_date">Tanggal Bergabung</MenuItem>
         <MenuItem value="department">Departemen</MenuItem>
@@ -92,7 +92,7 @@ export const EmployeeFilters: React.FC<EmployeeFiltersProps> = ({
     </FormControl>
     <FormControl fullWidth>
       <InputLabel>Urutan</InputLabel>
-      <Select value={sortOrder} onChange={(e) => setSortOrder(e.target.value as string)}>
+      <Select value={sortOrder} onChange={(e) => { setSortOrder(e.target.value); }}>
         <MenuItem value="ASC">Menaik</MenuItem>
         <MenuItem value="DESC">Menurun</MenuItem>
       </Select>
@@ -109,7 +109,7 @@ export const SortPopover: React.FC<{
   <Stack spacing={2} sx={{ p: 2, minWidth: 200 }}>
     <FormControl fullWidth>
       <InputLabel>Urutkan Berdasarkan</InputLabel>
-      <Select value={sortBy} onChange={(e) => setSortBy(e.target.value as string)}>
+      <Select value={sortBy} onChange={(e) => { setSortBy(e.target.value); }}>
         <MenuItem value="name">Nama</MenuItem>
         <MenuItem value="join_date">Tanggal Bergabung</MenuItem>
         <MenuItem value="department">Departemen</MenuItem>
@@ -118,7 +118,7 @@ export const SortPopover: React.FC<{
     </FormControl>
     <FormControl fullWidth>
       <InputLabel>Urutan</InputLabel>
-      <Select value={sortOrder} onChange={(e) => setSortOrder(e.target.value as string)}>
+      <Select value={sortOrder} onChange={(e) => { setSortOrder(e.target.value); }}>
         <MenuItem value="ASC">Menaik</MenuItem>
         <MenuItem value="DESC">Menurun</MenuItem>
       </Select>

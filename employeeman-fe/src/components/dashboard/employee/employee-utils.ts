@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/id';
-import { Employee } from './employee-types';
 import { config } from '@/config';
+import { type Employee } from './employee-types';
 
 dayjs.locale('id');
 

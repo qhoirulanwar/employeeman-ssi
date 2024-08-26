@@ -1,6 +1,6 @@
-import { config } from '@/config';
 import { Modal, Box, TextField, Typography, Button } from '@mui/material';
 import { useState } from 'react';
+import { config } from '@/config';
 
 
 const ImportCSVModal: React.FC<{

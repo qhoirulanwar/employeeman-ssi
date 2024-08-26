@@ -10,16 +10,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowSquareUpRight';
 import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
-
+import { Avatar } from '@mui/material';
+import { UserSwitch } from '@phosphor-icons/react';
 import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
-
 import { navItems } from './config';
 import { navIcons } from './nav-icons';
-import { Avatar } from '@mui/material';
-import { UserSwitch } from '@phosphor-icons/react';
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
