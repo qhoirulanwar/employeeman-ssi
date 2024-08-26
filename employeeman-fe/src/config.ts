@@ -8,7 +8,7 @@ export interface Config {
 }
 
 export const config: Config = {
-  serverURL: "http://localhost:3030",
+  serverURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3030",
   site: { name: 'Human Resource', description: '', themeColor: '#090a0b', url: getSiteURL() },
   logLevel: (process.env.NEXT_PUBLIC_LOG_LEVEL as keyof typeof LogLevel) ?? LogLevel.ALL,
 };

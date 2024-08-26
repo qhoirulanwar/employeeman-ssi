@@ -57,7 +57,7 @@ export function SideNav(): React.JSX.Element {
         {/* <Logo color="light" height={32} width={122} /> */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '46px', width: '46px' }}>
-            <UserSwitch fontSize="var(--icon-fontSize-lg)" />
+            {/* <UserSwitch fontSize="var(--icon-fontSize-lg)" /> */}
           </Avatar>
           <p style={{ marginLeft: '10px', fontSize: '20px', fontWeight: '700' }}>Human Resource</p>
         </div>

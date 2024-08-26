@@ -39,7 +39,11 @@ Proyek ini terdiri dari dua bagian utama:
 ### Konfigurasi Frontend 
 
 1. Navigasikan ke folder `employeeman-fe/src`.
-2. Buka file `config.ts` dan sesuaikan `serverURL` dengan URL backend Anda.
+2. Salin file `.env.example` menjadi `.env`:
+   ```
+   cp .env.example .env
+   ```
+3. Buka file `.env` dan sesuaikan `NEXT_PUBLIC_API_URL` dengan URL backend Anda.
 
 ### Menjalankan Frontend
 
