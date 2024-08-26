@@ -173,8 +173,8 @@ export const AddEmployeeForm: React.FC = () => {
                 helperText={errors.no?.message}
               />
               <TextField
-                {...register('position', { required: 'Posisi wajib diisi' })}
-                label="Posisi"
+                {...register('position', { required: 'Jabatan wajib diisi' })}
+                label="Jabatan"
                 error={Boolean(errors.position)}
                 helperText={errors.position?.message}
               />
