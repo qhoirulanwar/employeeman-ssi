@@ -39,7 +39,7 @@ Proyek ini terdiri dari dua bagian utama:
 
 ### Konfigurasi Frontend
 
-1. Navigasikan ke folder `employeeman-fe/src`.
+1. Navigasikan ke folder `employeeman-fe`.
 2. Salin file `.env.example` menjadi `.env`:
    ```
    cp .env.example .env
