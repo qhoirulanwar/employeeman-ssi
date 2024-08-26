@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   TextField,
@@ -16,6 +16,7 @@ import {
 import dayjs from 'dayjs';
 import { config } from '@/config';
 import { type Employee } from './employee-types';
+import { useForm, Controller } from 'react-hook-form';
 
 interface EmployeeEditFormProps {
   employee: Employee | null;
@@ -39,14 +40,18 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
   onSave,
   onCancel,
 }) => {
-  const [formData, setFormData] = useState<Employee | null>(null);
+  const { control, handleSubmit, setValue } = useForm<Employee>({
+    defaultValues: employee || {},
+  });
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [departments, setDepartments] = useState<DepartmentOption[]>([]);
 
   useEffect(() => {
     if (employee) {
-      setFormData(employee);
+      Object.entries(employee).forEach(([key, value]) => {
+        setValue(key as keyof Employee, value);
+      });
       setPreviewUrl(getPhotoUrl(employee.photo));
     }
 
@@ -65,35 +70,7 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
     };
 
     fetchDepartments();
-  }, [employee]);
-
-  const handleChange: any = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
-    const { name, value } = e.target;
-    setFormData((prevData: any) => ({
-      ...prevData!,
-      [name!]: value,
-    }));
-  };
-
-  const handleDepartmentChange = (event: React.SyntheticEvent, newValue: string | DepartmentOption | null) => {
-    if (typeof newValue === 'string') {
-      setFormData((prevData: any) => ({
-        ...prevData!,
-        department: newValue,
-      }));
-    } else if (newValue?.inputValue) {
-      // Create a new value from the user input
-      setFormData((prevData: any) => ({
-        ...prevData!,
-        department: newValue.inputValue,
-      }));
-    } else {
-      setFormData((prevData: any) => ({
-        ...prevData!,
-        department: newValue ? newValue.title : '',
-      }));
-    }
-  };
+  }, [employee, setValue]);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -103,103 +80,130 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData) {
-      onSave(formData, newPhoto);
-    }
+  const onSubmit = (data: Employee) => {
+    onSave(data, newPhoto);
   };
 
-  if (!formData) {
+  if (!employee) {
     console.log('Loading employees data...');
-    return <Typography />;
+    return <Typography>Loading...</Typography>;
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         <Typography variant="h6">Edit Data Karyawan</Typography>
 
-        <TextField
-          fullWidth
-          label="Nama"
+        <Controller
           name="name"
-          value={formData.name}
-          onChange={handleChange}
-        />
-        <TextField
-          fullWidth
-          label="Nomor Karyawan"
-          name="no"
-          value={formData.no}
-          onChange={handleChange}
-        />
-        <TextField
-          fullWidth
-          label="Jabatan"
-          name="position"
-          value={formData.position}
-          onChange={handleChange}
-        />
-        <Autocomplete
-          value={formData.department}
-          onChange={handleDepartmentChange}
-          filterOptions={(options, params) => {
-            const filtered = filter(options, params);
-
-            const { inputValue } = params;
-            // Suggest the creation of a new value
-            const isExisting = options.some((option) => inputValue === option.title);
-            if (inputValue !== '' && !isExisting) {
-              filtered.push({
-                inputValue,
-                title: `Tambah "${inputValue}"`,
-              });
-            }
-
-            return filtered;
-          }}
-          selectOnFocus
-          clearOnBlur
-          handleHomeEndKeys
-          options={departments}
-          getOptionLabel={(option) => {
-            if (typeof option === 'string') {
-              return option;
-            }
-            if (option.inputValue) {
-              return option.inputValue;
-            }
-            return option.title;
-          }}
-          renderOption={(props, option) => <li {...props}>{option.title}</li>}
-          freeSolo
-          renderInput={(params) => (
-            <TextField {...params} label="Departemen" fullWidth />
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              label="Nama"
+            />
           )}
         />
-        <TextField
-          fullWidth
-          label="Tanggal Bergabung"
+        <Controller
+          name="no"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              label="Nomor Karyawan"
+            />
+          )}
+        />
+        <Controller
+          name="position"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              label="Jabatan"
+            />
+          )}
+        />
+        <Controller
+          name="department"
+          control={control}
+          render={({ field }) => (
+            <Autocomplete
+              {...field}
+              onChange={(event, newValue) => {
+                if (typeof newValue === 'string') {
+                  field.onChange(newValue);
+                } else if (newValue && newValue.inputValue) {
+                  field.onChange(newValue.inputValue);
+                } else {
+                  field.onChange(newValue ? newValue.title : '');
+                }
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const { inputValue } = params;
+                const isExisting = options.some((option) => inputValue === option.title);
+                if (inputValue !== '' && !isExisting) {
+                  filtered.push({
+                    inputValue,
+                    title: `Tambah "${inputValue}"`,
+                  });
+                }
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={departments}
+              getOptionLabel={(option) => {
+                if (typeof option === 'string') {
+                  return option;
+                }
+                if (option.inputValue) {
+                  return option.inputValue;
+                }
+                return option.title;
+              }}
+              renderOption={(props, option) => <li {...props}>{option.title}</li>}
+              freeSolo
+              renderInput={(params) => (
+                <TextField {...params} label="Departemen" fullWidth />
+              )}
+            />
+          )}
+        />
+        <Controller
           name="join_date"
-          type="date"
-          value={dayjs(formData.join_date).format('YYYY-MM-DD')}
-          onChange={handleChange}
-          InputLabelProps={{
-            shrink: true,
-          }}
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              label="Tanggal Bergabung"
+              type="date"
+              value={dayjs(field.value).format('YYYY-MM-DD')}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          )}
         />
         <FormControl fullWidth>
           <InputLabel>Status</InputLabel>
-          <Select
+          <Controller
             name="status"
-            value={formData.status}
-            onChange={handleChange}
-          >
-            <MenuItem value="probation">Probation</MenuItem>
-            <MenuItem value="kontrak">Kontrak</MenuItem>
-            <MenuItem value="tetap">Tetap</MenuItem>
-          </Select>
+            control={control}
+            render={({ field }) => (
+              <Select {...field}>
+                <MenuItem value="probation">Probation</MenuItem>
+                <MenuItem value="kontrak">Kontrak</MenuItem>
+                <MenuItem value="tetap">Tetap</MenuItem>
+              </Select>
+            )}
+          />
         </FormControl>
 
         {/* Photo upload section */}
@@ -208,7 +212,7 @@ const EmployeeEditForm: React.FC<EmployeeEditFormProps> = ({
           <Stack direction="row" spacing={2} alignItems="center">
             <Avatar
               src={previewUrl || undefined}
-              alt={formData.name}
+              alt={employee.name}
               sx={{ width: 100, height: 100 }}
             />
             <Button

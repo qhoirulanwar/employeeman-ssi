@@ -18,11 +18,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Grid,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { Download as DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
-import { SortAscending, Funnel } from '@phosphor-icons/react';
+import { SortAscending, Funnel, FileArrowDown } from '@phosphor-icons/react';
 import Link from 'next/link';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -49,6 +52,9 @@ export default function EmployeePage(): React.JSX.Element {
   const [editModalOpen, setEditModalOpen] = React.useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [selectedEmployee, setSelectedEmployee] = React.useState<Employee | null>(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const queryClient = useQueryClient();
 
@@ -107,10 +113,6 @@ export default function EmployeePage(): React.JSX.Element {
       console.log('EmployeePage unmounted');
     };
   }, []);
-
-  // React.useEffect(() => {
-  //   setAnchorEl(null);
-  // }, [department, status, sortBy, sortOrder, page, rowsPerPage]);
 
   const handleSort = (column: string) => {
     if (sortBy === column) {
@@ -228,130 +230,128 @@ export default function EmployeePage(): React.JSX.Element {
 
   return (
     <Stack spacing={3}>
-      <Stack direction="row" spacing={3}>
-        <Stack spacing={3} sx={{ flex: '1 1 auto' }}>
-          <Typography variant="h4">Data Karyawan</Typography>
-        </Stack>
-        <div>
-          <Button color="inherit" startIcon={<SortAscending fontSize="var(--icon-fontSize-md)" />}
-            onClick={handleSortClick}
-          >
-            Sort
-          </Button>
-          <Popover
-            open={Boolean(sortAnchorEl)}
-            anchorEl={sortAnchorEl}
-            onClose={handleSortClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <SortPopover
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-              sortOrder={sortOrder}
-              setSortOrder={setSortOrder}
-            />
-          </Popover>
-
-          <Button
-            color="inherit"
-            startIcon={<Funnel fontSize="var(--icon-fontSize-md)" />}
-            onClick={handleFilterClick}
-          >
-            Filter
-          </Button>
-          <Popover
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={handleFilterClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <FilterPopover
-              department={department}
-              setDepartment={setDepartment}
-              status={status}
-              setStatus={setStatus}
-            />
-          </Popover>
-        </div>
-      </Stack>
-
-      <Stack justifyContent="space-between" direction="row" spacing={1} sx={{ paddingBottom: '12px' }}>
-        <Stack direction="row" spacing={2}>
-          <Link href="/dashboard/employee/add">
-            <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
-              Tambah Karyawan
+      <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+        <Grid item xs={12} sm={6}>
+          <Typography variant={isMobile ? "h5" : "h4"}>Data Karyawan</Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} container justifyContent="flex-end" spacing={1}>
+          <Grid item>
+            <Button
+              color="inherit"
+              startIcon={<SortAscending fontSize="var(--icon-fontSize-md)" />}
+              onClick={handleSortClick}
+              size={isMobile ? "small" : "medium"}
+            >
+              Sort
             </Button>
-          </Link>
-          <Button startIcon={<UploadIcon fontSize="var(--icon-fontSize-md)" />}
-            onClick={handleImportModalOpen}
-          >
-            Import CSV
-          </Button>
-        </Stack>
+          </Grid>
+          <Grid item>
+            <Button
+              color="inherit"
+              startIcon={<Funnel fontSize="var(--icon-fontSize-md)" />}
+              onClick={handleFilterClick}
+              size={isMobile ? "small" : "medium"}
+            >
+              Filter
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
 
-        <Stack direction="row" spacing={2}>
-          <Button
-            color="inherit"
-            startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}
-            onClick={exportToCSV}
-          >
-            Export ke CSV
-          </Button>
-          <Button color="inherit" startIcon={<DownloadIcon fontSize="var(--icon-fontSize-md)" />}
-            onClick={exportToPDF}
-          >
-            Export ke PDF
-          </Button>
-        </Stack>
-      </Stack>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={12} sm={6} container spacing={1}>
+          <Grid item>
+            <Link href="/dashboard/employee/add">
+              <Button
+                startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />}
+                variant="contained"
+                size={isMobile ? "small" : "medium"}
+              >
+                Tambah Karyawan
+              </Button>
+            </Link>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              startIcon={<UploadIcon fontSize="var(--icon-fontSize-md)" />}
+              onClick={handleImportModalOpen}
+              size={isMobile ? "small" : "medium"}
+            >
+              Import CSV
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} sm={6} container justifyContent="flex-end" spacing={1}>
+          <Grid item>
+            <Button
+              color="success"
+              variant="outlined"
+              startIcon={<FileArrowDown fontSize="var(--icon-fontSize-md)" />}
+              onClick={exportToCSV}
+              size={isMobile ? "small" : "medium"}
+            >
+              Export ke CSV
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              color="error"
+              variant="outlined"
+              startIcon={<FileArrowDown fontSize="var(--icon-fontSize-md)" />}
+              onClick={exportToPDF}
+              size={isMobile ? "small" : "medium"}
+            >
+              Export ke PDF
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
 
       {data ? <EmployeeTable
-          employees={data.data}
-          sortBy={sortBy}
-          sortOrder={sortOrder}
-          onSort={handleSort}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        /> : null}
+        employees={data.data}
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSort={handleSort}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      /> : null}
 
-      {data ? <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-          <FormControl>
-            <Select
-              value={rowsPerPage}
-              onChange={handleChangeRowsPerPage}
-              displayEmpty
-              inputProps={{ 'aria-label': 'Rows per page' }}
-            >
-              <MenuItem value={5}>5 baris per halaman</MenuItem>
-              <MenuItem value={10}>10 baris per halaman</MenuItem>
-              <MenuItem value={25}>25 baris per halaman</MenuItem>
-              <MenuItem value={50}>50 baris per halaman</MenuItem>
-            </Select>
-          </FormControl>
-          <Typography>
-            Halaman {page} dari {data.meta.totalPages} (Total {data.meta.total} data)
-          </Typography>
-          <Pagination
-            count={data.meta.totalPages}
-            page={page}
-            onChange={(event, value) => { setPage(value); }}
-            color="primary"
-          />
-        </Box> : null}
+      {data ? (
+        <Box sx={{ mt: 2 }}>
+          <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+            <Grid item xs={12} sm={3}>
+              <FormControl fullWidth size={isMobile ? "small" : "small"}>
+                <Select
+                  value={rowsPerPage}
+                  onChange={handleChangeRowsPerPage}
+                  displayEmpty
+                  inputProps={{ 'aria-label': 'Rows per page' }}
+                >
+                  <MenuItem value={5}>5 baris per halaman</MenuItem>
+                  <MenuItem value={10}>10 baris per halaman</MenuItem>
+                  <MenuItem value={25}>25 baris per halaman</MenuItem>
+                  <MenuItem value={50}>50 baris per halaman</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Typography align="center">
+                Halaman {page} dari {data.meta.totalPages} (Total {data.meta.total} data)
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={5} justifyContent="center">
+              <Pagination
+                count={data.meta.totalPages}
+                page={page}
+                onChange={(event, value) => { setPage(value); }}
+                color="primary"
+                size="medium"
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      ) : null}
 
       <ImportCSVModal open={importModalOpen} onClose={handleImportModalClose} />
 
@@ -366,7 +366,8 @@ export default function EmployeePage(): React.JSX.Element {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 400,
+          width: isMobile ? '90%' : 400,
+          maxWidth: '100%',
           bgcolor: 'background.paper',
           boxShadow: 24,
           p: 4,
@@ -400,6 +401,48 @@ export default function EmployeePage(): React.JSX.Element {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Popover
+        open={Boolean(sortAnchorEl)}
+        anchorEl={sortAnchorEl}
+        onClose={handleSortClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <SortPopover
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+        />
+      </Popover>
+
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleFilterClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <FilterPopover
+          department={department}
+          setDepartment={setDepartment}
+          status={status}
+          setStatus={setStatus}
+        />
+      </Popover>
     </Stack>
   );
 }

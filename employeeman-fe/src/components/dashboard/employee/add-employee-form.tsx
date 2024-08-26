@@ -284,28 +284,32 @@ export const AddEmployeeForm: React.FC = () => {
           </Grid>
 
           {/* Submit button */}
-          <Grid item xs={7}>
-            <Box display="flex" justifyContent="space-between">
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                style={{ width: '48%' }}
-              >
-                Tambah Karyawan
-              </Button>
-
-              <Button
-                type="button"
-                variant="outlined"
-                color="error"
-                onClick={handleCancel}
-                style={{ width: '48%' }}
-              >
-                Kembali
-              </Button>
-            </Box>
+          <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                >
+                  Tambah Karyawan
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  color="error"
+                  onClick={handleCancel}
+                  fullWidth
+                >
+                  Kembali
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
+
         </Grid>
       </Paper>
     </form>
