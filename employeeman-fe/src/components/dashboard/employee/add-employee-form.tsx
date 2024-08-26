@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, type SubmitHandler, Controller } from 'react-hook-form';
 import {
   Stack, Typography, TextField, Button, FormControl, InputLabel,
-  Select, MenuItem, Box, Paper, Grid, Autocomplete, createFilterOptions
+  Select, MenuItem, Box, Paper, Grid, Autocomplete, createFilterOptions, CircularProgress
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { CheckCircle } from '@phosphor-icons/react';
@@ -36,6 +36,7 @@ export const AddEmployeeForm: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [departments, setDepartments] = useState<DepartmentOption[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const watchFile = watch("file");
@@ -74,6 +75,7 @@ export const AddEmployeeForm: React.FC = () => {
   }, [watchFile]);
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    setIsLoading(true);
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
       const value: any = data[key as keyof IFormInput];
@@ -98,6 +100,8 @@ export const AddEmployeeForm: React.FC = () => {
     } catch (error) {
       console.error('Error:', error);
       alert('Terjadi kesalahan saat menambahkan data karyawan');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -115,7 +119,6 @@ export const AddEmployeeForm: React.FC = () => {
     return (
       <Paper elevation={3} >
         <Stack spacing={2} alignItems="center" style={{ padding: '82px 20px', textAlign: 'center' }}>
-          {/* <CheckCircleIcon style={{ fontSize: 60, color: 'green' }} /> */}
           <Typography variant="h5">Form Terkirim</Typography>
           <CheckCircle size={182} color='green' />
         </Stack>
@@ -292,8 +295,13 @@ export const AddEmployeeForm: React.FC = () => {
                   variant="contained"
                   color="primary"
                   fullWidth
+                  disabled={isLoading}
                 >
-                  Tambah Karyawan
+                  {isLoading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    'Tambah Karyawan'
+                  )}
                 </Button>
               </Grid>
               <Grid item xs={12} sm={3}>
@@ -303,6 +311,7 @@ export const AddEmployeeForm: React.FC = () => {
                   color="error"
                   onClick={handleCancel}
                   fullWidth
+                  disabled={isLoading}
                 >
                   Kembali
                 </Button>
