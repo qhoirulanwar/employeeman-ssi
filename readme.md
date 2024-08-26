@@ -1,3 +1,5 @@
+![screenshoot](screenshoot-1.png)
+
 # Employeeman
 
 Employeeman adalah aplikasi manajemen karyawan yang terdiri dari backend (employeeman-be) dan frontend (employeeman-fe).
@@ -35,8 +37,7 @@ Proyek ini terdiri dari dua bagian utama:
 2. Jalankan perintah `npm install` untuk menginstal semua dependensi.
 3. Setelah instalasi selesai, jalankan perintah `npm run start` untuk memulai server backend.
 
-
-### Konfigurasi Frontend 
+### Konfigurasi Frontend
 
 1. Navigasikan ke folder `employeeman-fe/src`.
 2. Salin file `.env.example` menjadi `.env`:
