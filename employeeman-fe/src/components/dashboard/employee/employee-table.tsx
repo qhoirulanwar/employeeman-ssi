@@ -12,6 +12,8 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Typography,
+  Box,
 } from '@mui/material';
 import { CaretUp as CaretUpIcon } from '@phosphor-icons/react/dist/ssr/CaretUp';
 import { CaretDown as CaretDownIcon } from '@phosphor-icons/react/dist/ssr/CaretDown';
@@ -73,6 +75,19 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
       handleMenuClose();
     }
   };
+
+  if (employees.length === 0) {
+    return (
+      <Box sx={{ p: 3, textAlign: 'center' }}>
+        <Typography variant="h6" color="text.secondary">
+          Tidak ada data karyawan yang tersedia.
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Silakan tambahkan karyawan baru untuk melihat data di sini.
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <TableContainer component={Paper}>

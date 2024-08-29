@@ -20,10 +20,13 @@ export function DepartmentDistribution({ sx }: DepartmentDistributionProps): Rea
   const [chartSeries, setChartSeries] = React.useState<number[]>([]);
   const [labels, setLabels] = React.useState<string[]>([]);
   const [departemenValue, setDepartemenValue] = React.useState<number[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     async function fetchData() {
       try {
+        setIsLoading(true);
         // Mengambil daftar departemen
         const departmentsResponse = await fetch(`${config.serverURL}/employees/departments/search`);
         const departmentsData = await departmentsResponse.json();
@@ -54,6 +57,9 @@ export function DepartmentDistribution({ sx }: DepartmentDistributionProps): Rea
         setChartSeries(percentages.map(p => parseFloat(p.percentage.toFixed(2))));
       } catch (error) {
         console.error('Error fetching data:', error);
+        setError('Terjadi kesalahan saat mengambil data.');
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -66,23 +72,31 @@ export function DepartmentDistribution({ sx }: DepartmentDistributionProps): Rea
     <Card sx={sx}>
       <CardHeader title="Distribusi Departemen Karyawan" />
       <CardContent>
-        <Stack spacing={2}>
-          <Chart height={300} options={chartOptions} series={departemenValue} type="pie" width="100%" />
-          <Stack direction="row" spacing={2} sx={{ alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {chartSeries.map((item, index) => {
-              const label = labels[index];
+        {isLoading ? (
+          <Typography>Memuat data...</Typography>
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : chartSeries.length === 0 ? (
+          <Typography>Tidak ada data karyawan yang tersedia.</Typography>
+        ) : (
+          <Stack spacing={2}>
+            <Chart height={300} options={chartOptions} series={departemenValue} type="pie" width="100%" />
+            <Stack direction="row" spacing={2} sx={{ alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+              {chartSeries.map((item, index) => {
+                const label = labels[index];
 
-              return (
-                <Stack key={label} spacing={1} sx={{ alignItems: 'center', margin: 1 }}>
-                  <Typography variant="h6">{label}</Typography>
-                  <Typography color="text.secondary" variant="subtitle2">
-                    {item}%
-                  </Typography>
-                </Stack>
-              );
-            })}
+                return (
+                  <Stack key={label} spacing={1} sx={{ alignItems: 'center', margin: 1 }}>
+                    <Typography variant="h6">{label}</Typography>
+                    <Typography color="text.secondary" variant="subtitle2">
+                      {item}%
+                    </Typography>
+                  </Stack>
+                );
+              })}
+            </Stack>
           </Stack>
-        </Stack>
+        )}
       </CardContent>
     </Card>
   );
