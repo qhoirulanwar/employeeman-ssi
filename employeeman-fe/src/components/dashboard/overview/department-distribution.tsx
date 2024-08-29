@@ -77,20 +77,20 @@ export function DepartmentDistribution({ sx }: DepartmentDistributionProps): Rea
         ) : error ? (
           <Typography color="error">{error}</Typography>
         ) : chartSeries.length === 0 ? (
-          <Typography>Tidak ada data karyawan yang tersedia.</Typography>
+          <Typography>Tidak ada data yang ditampilkan.</Typography>
         ) : (
           <Stack spacing={2}>
             <Chart height={300} options={chartOptions} series={departemenValue} type="pie" width="100%" />
             <Stack direction="row" spacing={2} sx={{ alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
-              {chartSeries.map((item, index) => {
+              {departemenValue.map((item, index) => {
                 const label = labels[index];
 
                 return (
                   <Stack key={label} spacing={1} sx={{ alignItems: 'center', margin: 1 }}>
-                    <Typography variant="h6">{label}</Typography>
+                    {/* <Typography variant="h6">{label}</Typography>
                     <Typography color="text.secondary" variant="subtitle2">
-                      {item}%
-                    </Typography>
+                      {item}
+                    </Typography> */}
                   </Stack>
                 );
               })}
@@ -115,10 +115,10 @@ function useChartOptions(labels: string[]): ApexOptions {
       theme.palette.error.main,
       theme.palette.info.main,
     ],
-    dataLabels: { enabled: false },
+    dataLabels: { enabled: true },
     labels,
-    legend: { show: false },
-    plotOptions: { pie: { expandOnClick: false } },
+    legend: { show: true, position: 'bottom' },
+    plotOptions: { pie: { expandOnClick: true } },
     states: { active: { filter: { type: 'none' } }, hover: { filter: { type: 'none' } } },
     stroke: { width: 0 },
     theme: { mode: theme.palette.mode },
